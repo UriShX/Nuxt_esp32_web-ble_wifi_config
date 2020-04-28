@@ -1,25 +1,42 @@
 <template>
-  <b-container>
-    <div>
-      <!-- <logo /> -->
-      <b-row>
-        <h1 class="mb-3">
-          ESP32 WiFi config
-        </h1>
-      </b-row>
-      <config />
-    </div>
-  </b-container>
+  <div>
+    <b-row>
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        @dismissed="dismissCountDown = 0"
+        @dismiss-count-down="countDownChanged"
+      >
+        <p>This alert will dismiss after {{ dismissCountDown }} seconds...</p>
+        <b-progress
+          variant="alert"
+          :max="dismissSecs"
+          :value="dismissCountDown"
+          height="4px"
+        ></b-progress>
+      </b-alert>
+    </b-row>
+    <config id="config" />
+  </div>
 </template>
 
 <script>
-// import Logo from '~/components/Logo.vue'
 import Config from '~/components/Config'
 
 export default {
   components: {
-    // Logo
     Config
+  },
+  data() {
+    return {
+      dismissSecs: 60,
+      dismissCountDown: 60
+    }
+  },
+  methods: {
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    }
   }
 }
 </script>

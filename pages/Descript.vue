@@ -1,5 +1,5 @@
 <template>
-  <div class="row" id="description-text">
+  <div id="description-text" class="row">
     <div class="col mb-6">
       <h3 class="mb-6">Description</h3>
       <p>

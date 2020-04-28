@@ -1,6 +1,8 @@
+import fs from 'fs'
+
 export default {
-  // mode: 'universal',
-  mode: 'spa',
+  mode: 'universal',
+  // mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -53,5 +55,11 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  server: {
+    https: {
+      key: fs.readFileSync('./ssl/server.key'),
+      cert: fs.readFileSync('./ssl/server.crt')
+    }
   }
 }

@@ -9,7 +9,7 @@
         data-bind="submit: passData"
       >
         <b-row>
-          <b-col cols="12">
+          <b-col cols="11">
             <b-form-group
               id="ssidPrim-group"
               class="mt-2"
@@ -39,7 +39,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col cols="12">
+          <b-col cols="11">
             <b-form-group
               id="pwPrim-group"
               class="mt-2"
@@ -73,7 +73,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col cols="12">
+          <b-col cols="11">
             <b-form-row>
               <b-form-checkbox
                 id="checkbox-1"
@@ -119,7 +119,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col cols="12">
+          <b-col cols="11">
             <b-form-group
               id="pwSec-group"
               class="mt-2"

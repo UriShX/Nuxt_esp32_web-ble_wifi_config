@@ -1,7 +1,17 @@
 <template>
   <div>
     <navbar />
-    <nuxt />
+    <b-container fluid="sm">
+      <div>
+        <b-row>
+          <h1 class="mb-3">
+            ESP32 WiFi config
+          </h1>
+        </b-row>
+
+        <nuxt />
+      </div>
+    </b-container>
   </div>
 </template>
 
