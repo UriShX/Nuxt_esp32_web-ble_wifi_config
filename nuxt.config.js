@@ -17,6 +17,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
+    // script: [{ src: '~/assets/geo_spoof.js' }],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
@@ -30,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/espconfig.client'],
   /*
    ** Nuxt.js dev-modules
    */

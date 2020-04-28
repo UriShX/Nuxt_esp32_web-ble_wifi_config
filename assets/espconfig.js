@@ -97,6 +97,10 @@ class Espconfig {
     this._onDisconnected = listener
   }
 
+  getAvailability() {
+    return navigator.bluetooth.getAvailability()
+  }
+
   request() {
     const options = {
       filters: [

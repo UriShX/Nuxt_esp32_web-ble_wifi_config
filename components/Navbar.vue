@@ -32,14 +32,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import Espconfig from '~/assets/espconfig'
+// import Espconfig from '~/assets/espconfig'
 
 export default {
   data() {
     return {
       // btStat: connected,
       btIcon: 'bluetooth',
-      espconfig: new Espconfig(),
+      // espconfig: new Espconfig(),
       btAvailable: null
     }
   },
@@ -48,12 +48,12 @@ export default {
       btStat: (state) => state.connected
     })
   },
-  async created() {
-    this.btAvailable = await navigator.bluetooth.getAvailability()
+  async mounted() {
+    this.btAvailable = await this.$espconfig.getAvailability()
 
     if (this.btAvailable) {
-      this.espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
-      this.espconfig.setConnectionStatusUuid(
+      this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
+      this.$espconfig.setConnectionStatusUuid(
         '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
       ) // Notification, wifi connection status UUID
     } else {
@@ -65,12 +65,13 @@ export default {
       if (!this.btStat) {
         this.btIcon = 'bluetooth_searching'
         // Request the device for connection and get its name after successful connection.
-        await this.espconfig
+        await this.$espconfig
           .request()
-          .then((_) => this.espconfig.connect())
+          .then((_) => this.$espconfig.connect())
           .then((_) => {
-            this.espconfig.recieveCredentials()
-            this.btStat = !this.btStat
+            // this.$espconfig.recieveCredentials()
+            // this.btStat = !this.btStat
+            this.$store.dispatch('switchConnection', !this.btStat)
             this.btIcon = 'bluetooth_connected'
           })
           .catch((error) => {
@@ -80,8 +81,9 @@ export default {
           })
       } else {
         // Disconnect from the connected device.
-        await this.espconfig.disconnect()
-        this.btStat = !this.btStat
+        await this.$espconfig.disconnect()
+        // this.btStat = !this.btStat
+        this.$store.dispatch('switchConnection', !this.btStat)
         this.btIcon = 'bluetooth'
       }
     }

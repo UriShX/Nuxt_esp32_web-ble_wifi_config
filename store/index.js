@@ -8,7 +8,11 @@ export const mutations = {
   }
 }
 
-export const actions = {}
+export const actions = {
+  switchConnection({ commit }, btStat) {
+    commit('connectionStat', btStat)
+  }
+}
 
 export const getters = {
   getConnection(state) {
