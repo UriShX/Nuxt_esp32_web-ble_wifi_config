@@ -17,7 +17,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    // script: [{ src: '~/assets/geo_spoof.js' }],
+    script: [{ src: 'geo_spoof.js' }],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
