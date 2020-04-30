@@ -20,12 +20,17 @@
               <b-input-group id="ssidPrim" ref="ssidPrim">
                 <b-form-input
                   v-model="ssidPrim"
+                  :disabled="!btStat"
                   type="text"
                   :state="validation"
                   placeholder="Primary SSID"
                 ></b-form-input>
                 <b-input-group-append class="w-50">
-                  <b-form-select v-model="ssidPrim" :options="wifiList">
+                  <b-form-select
+                    v-model="ssidPrim"
+                    :disabled="!btStat"
+                    :options="wifiList"
+                  >
                     <template v-slot:first>
                       <b-form-select-option :value="null" disabled>
                         -- SSID from ESP32 --
@@ -51,6 +56,7 @@
                 <b-form-input
                   v-model="pwPrim"
                   type="password"
+                  :disabled="!btStat"
                   :state="validation"
                   placeholder="Enter password"
                 ></b-form-input>
@@ -58,6 +64,7 @@
                   <b-button
                     id="pwPrimBtn"
                     variant="outline-secondary"
+                    :disabled="!btStat"
                     @click="pwToggle"
                   >
                     <i id="pwPrimEye" class="material-icons material-sm-font">
@@ -171,13 +178,9 @@
 </template>
 
 <script>
-// import { BIconEyeSlash, BIconEye } from 'bootstrap-vue'
+import { mapState } from 'vuex'
 
 export default {
-  components: {
-    // BIconEyeSlash,
-    // BIconEye
-  },
   data() {
     return {
       ssidPrim: null,
@@ -191,7 +194,10 @@ export default {
   computed: {
     validation() {
       return this.pwPrim.length > 4 && this.pwPrim.length < 13
-    }
+    },
+    ...mapState({
+      btStat: (state) => state.connected
+    })
   },
   methods: {
     pwToggle(e) {

@@ -5,7 +5,19 @@
       properly you must have it enabled.
     </b-alert>
     <b-alert show variant="warning" :hidden="btAvailable">
-      <span v-html="availabiltyMessage"></span>
+      <!-- <span v-html="availabiltyMessage"></span> -->
+      <p v-for="message in availabiltyMessage" :key="message">
+        {{ message }}
+      </p>
+      <p>
+        Please check implementation status at:
+        <a
+          href="https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md"
+        >
+          this
+        </a>
+        github repo
+      </p>
     </b-alert>
   </div>
 </template>
@@ -18,7 +30,8 @@ export default {
   data() {
     return {
       alertSwitch: null,
-      availabiltyMessage: ''
+      environmentVars: null,
+      availabiltyMessage: []
     }
   },
   computed: {
@@ -27,10 +40,11 @@ export default {
     })
   },
   created() {
+    // If JS loads, hide JS missing alert
     this.alertSwitch = true
   },
   mounted() {
-    this.availabiltyMessage = navigatorCheck()
+    this.environmentVars = navigatorCheck()
 
     if (this.btAvailable) {
       this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
@@ -38,8 +52,24 @@ export default {
         '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
       ) // Notification, wifi connection status UUID
     } else {
-      this.availabiltyMessage =
-        '<p>' + this.availabiltyMessage + '</p>' + '<p> Lorem Ipsum </p>'
+      if (this.environmentVars.os === '') {
+        this.availabiltyMessage.push(
+          'Your OS does not yet provide support for the web-bluetooth protocolYour OS.'
+        )
+      } else {
+        this.availabiltyMessage.push(
+          `You are using a ${this.environmentVars.nav} based browser on a ${this.environmentVars.os} OS.`
+        )
+      }
+      if (this.environmentVars.nav === 'Chromium') {
+        this.availabiltyMessage.push(
+          'You may be seeing this message since web-bluetooth is not enabled in your system.'
+        )
+      } else {
+        this.availabiltyMessage.push(
+          'The browser you are using does not yet provide support for the web-bluetooth protocol.'
+        )
+      }
     }
   }
 }
