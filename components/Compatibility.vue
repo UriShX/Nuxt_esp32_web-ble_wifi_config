@@ -11,24 +11,26 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import navigatorCheck from '~/assets/navigatorCheck'
 
 export default {
   data() {
     return {
       alertSwitch: null,
-      btAvailable: null,
       availabiltyMessage: ''
     }
+  },
+  computed: {
+    ...mapState({
+      btAvailable: (state) => state.available
+    })
   },
   created() {
     this.alertSwitch = true
   },
-  async mounted() {
-    this.btAvailable = await this.$espconfig.getAvailability()
+  mounted() {
     this.availabiltyMessage = navigatorCheck()
-    // eslint-disable-next-line
-    // console.log(this.btAvailable)
 
     if (this.btAvailable) {
       this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.

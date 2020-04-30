@@ -36,26 +36,21 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      btIcon: 'bluetooth',
-      btAvailable: null
+      btIcon: 'bluetooth'
+      // btAvailable: null
     }
   },
   computed: {
     ...mapState({
-      btStat: (state) => state.connected
+      btStat: (state) => state.connected,
+      btAvailable: (state) => state.available
     })
   },
   async mounted() {
-    this.btAvailable = await this.$espconfig.getAvailability()
-    // eslint-disable-next-line
-    console.log(this.btAvailable)
+    this.btCurr = await this.$espconfig.getAvailability()
+    this.$store.dispatch('switchAvailability', this.btCurr)
 
-    if (this.btAvailable) {
-      this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
-      this.$espconfig.setConnectionStatusUuid(
-        '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
-      ) // Notification, wifi connection status UUID
-    } else {
+    if (!this.btAvailable) {
       this.btIcon = 'bluetooth_disabled'
     }
   },

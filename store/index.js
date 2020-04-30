@@ -4,8 +4,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  availableStat(state) {
-    state.available = !state.available
+  availableStat(state, currStat) {
+    state.available = currStat
   },
   connectionStat(state) {
     state.connected = !state.connected
