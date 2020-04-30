@@ -46,3 +46,11 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  head() {
+    return { title: 'About: ESP32 configuration tool built w/ Nuxt.js' }
+  }
+}
+</script>

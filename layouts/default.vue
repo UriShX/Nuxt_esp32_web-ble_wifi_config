@@ -2,6 +2,9 @@
   <div>
     <navbar />
     <b-container fluid="sm">
+      <div class="mt-2">
+        <compatibility />
+      </div>
       <div>
         <b-row>
           <h1 class="mb-3">
@@ -17,10 +20,12 @@
 
 <script>
 import Navbar from '~/components/Navbar'
+import Compatibility from '~/components/Compatibility'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    Compatibility
   }
 }
 </script>

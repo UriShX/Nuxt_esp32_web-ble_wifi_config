@@ -32,14 +32,11 @@
 
 <script>
 import { mapState } from 'vuex'
-// import Espconfig from '~/assets/espconfig'
 
 export default {
   data() {
     return {
-      // btStat: connected,
       btIcon: 'bluetooth',
-      // espconfig: new Espconfig(),
       btAvailable: null
     }
   },
@@ -50,6 +47,8 @@ export default {
   },
   async mounted() {
     this.btAvailable = await this.$espconfig.getAvailability()
+    // eslint-disable-next-line
+    console.log(this.btAvailable)
 
     if (this.btAvailable) {
       this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.

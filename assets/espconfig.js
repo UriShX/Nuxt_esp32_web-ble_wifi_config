@@ -98,7 +98,11 @@ class Espconfig {
   }
 
   getAvailability() {
-    return navigator.bluetooth.getAvailability()
+    try {
+      return navigator.bluetooth.getAvailability()
+    } catch (error) {
+      return false
+    }
   }
 
   request() {

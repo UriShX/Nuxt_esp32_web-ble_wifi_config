@@ -181,9 +181,9 @@ export default {
   data() {
     return {
       ssidPrim: null,
-      pwPrim: null,
+      pwPrim: '',
       ssidSec: null,
-      pwSec: null,
+      pwSec: '',
       wifiList: ['abc', 'Kuki'],
       enabled: { prim: true, sec: false }
     }
