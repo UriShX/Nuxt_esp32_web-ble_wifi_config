@@ -30,6 +30,10 @@ export default {
 }
 </script>
 <style>
+.material-sm-font {
+  font-size: 1em;
+}
+
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;

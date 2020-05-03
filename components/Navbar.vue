@@ -22,10 +22,12 @@
       :disabled="!btAvailable"
       @click="btConnect"
     >
-      <span id="connect_text">Connect </span>
-      <i id="connection_status" class="material-icons material-sm-font">{{
-        btIcon
-      }}</i>
+      <span id="connect_text">
+        {{ btBtnText }}
+      </span>
+      <i id="connection_status" class="material-icons material-sm-font">
+        {{ btIcon }}
+      </i>
     </b-button>
   </b-navbar>
 </template>
@@ -36,8 +38,8 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      btIcon: 'bluetooth'
-      // btAvailable: null
+      btIcon: 'bluetooth',
+      btBtnText: 'Connect '
     }
   },
   computed: {
@@ -57,6 +59,7 @@ export default {
   methods: {
     async btConnect() {
       if (!this.btStat) {
+        this.btBtnText = 'Connecting... '
         this.btIcon = 'bluetooth_searching'
         // Request the device for connection and get its name after successful connection.
         await this.$espconfig
@@ -66,11 +69,13 @@ export default {
             // this.$espconfig.recieveCredentials()
             // this.btStat = !this.btStat
             this.$store.dispatch('switchConnection', !this.btStat)
+            this.btBtnText = 'Disconnect '
             this.btIcon = 'bluetooth_connected'
           })
           .catch((error) => {
             // eslint-disable-next-line
             console.log(error)
+            this.btBtnText = 'Connect '
             this.btIcon = 'bluetooth'
           })
       } else {
@@ -78,15 +83,10 @@ export default {
         await this.$espconfig.disconnect()
         // this.btStat = !this.btStat
         this.$store.dispatch('switchConnection', !this.btStat)
+        this.btBtnText = 'Connect '
         this.btIcon = 'bluetooth'
       }
     }
   }
 }
 </script>
-
-<style scoped>
-.material-sm-font {
-  font-size: 1em;
-}
-</style>
