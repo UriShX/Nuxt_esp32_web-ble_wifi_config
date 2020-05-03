@@ -5,8 +5,10 @@
     class="row needs-validation"
     novalidate
     @submit.prevent="onSubmit"
+    @reset.prevent="onReset"
   >
     <InputPair
+      ref="Prim"
       role="Prim"
       :wifilist="wifiList"
       :enabled="btStat"
@@ -29,6 +31,7 @@
       </b-form-checkbox>
     </b-form-row>
     <InputPair
+      ref="Sec"
       role="Sec"
       :wifilist="wifiList"
       :enabled="secEnabled && btStat"
@@ -45,7 +48,12 @@
       <b-button id="eraseSSIDs" variant="secondary" @click="eraseSSIDs">
         Erase
       </b-button>
-      <b-button id="resetSSIDs" variant="secondary" @click="resetSSIDs">
+      <b-button
+        id="resetSSIDs"
+        type="reset"
+        variant="secondary"
+        @click="eraseSSIDs"
+      >
         Reset
       </b-button>
     </b-col>
@@ -76,9 +84,6 @@ export default {
     }
   },
   computed: {
-    validation() {
-      return this.form.pwPrim.length > 4 && this.form.pwPrim.length < 13
-    },
     ...mapState({
       btStat: (state) => state.connected
     })
@@ -90,14 +95,12 @@ export default {
       },
       pwPrim: {
         required
-        // between: between(4, 32)
       },
       ssidSec: {
         required
       },
       pwSec: {
         required
-        // between: between(4, 32)
       }
     }
   },
@@ -106,9 +109,21 @@ export default {
       const { $dirty, $error } = this.$v.form[name]
       return $dirty ? !$error : null
     },
-    eraseSSIDs() {},
-    resetSSIDs(evt) {
-      evt.preventDefault()
+    eraseSSIDs() {
+      // Reset our form values
+      this.form.ssidPrim = ''
+      this.form.pwPrim = ''
+      this.form.ssidSec = ''
+      this.form.pwSec = ''
+
+      try {
+        this.$refs.Prim.ssid = null
+        this.$refs.Prim.pw = null
+        this.$refs.Sec.ssid = null
+        this.$refs.Sec = null
+      } catch (error) {
+        alert(error)
+      }
     },
     onSubmit(evt) {
       if (!this.form.ssidSec && !this.form.pwSec && !this.secEnabled) {
@@ -125,13 +140,7 @@ export default {
 
       alert(JSON.stringify(this.form))
     },
-    onReset(evt) {
-      evt.preventDefault()
-      // Reset our form values
-      this.form.ssidPrim = ''
-      this.form.pwPrim = ''
-      this.form.ssidSec = ''
-      this.form.pwSec = ''
+    onReset() {
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
