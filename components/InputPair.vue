@@ -10,7 +10,7 @@
       >
         <b-input-group ref="ssid">
           <b-form-input
-            id="ssid"
+            :id="ssidId"
             v-model="ssid"
             :disabled="!enabled"
             type="text"
@@ -19,7 +19,7 @@
           ></b-form-input>
           <b-input-group-append class="w-50">
             <b-form-select
-              id="ssid-select"
+              :id="ssidId + '-select'"
               v-model="ssid"
               :disabled="!enabled"
               :options="wifilist"
@@ -33,9 +33,11 @@
             </b-form-select>
           </b-input-group-append>
         </b-input-group>
-        <b-form-invalid-feedback :state="validation" align="left">
-          Primary SSID cannot be blank!
-        </b-form-invalid-feedback>
+        <div :hidden="!enabled">
+          <b-form-invalid-feedback :state="validate.ssid" align="left">
+            SSID cannot be blank!
+          </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </b-col>
     <b-col cols="11">
@@ -48,7 +50,7 @@
       >
         <b-input-group ref="pw">
           <b-form-input
-            id="pw"
+            :id="pwId"
             v-model="pw"
             type="password"
             :disabled="!enabled"
@@ -57,7 +59,7 @@
           ></b-form-input>
           <b-input-group-append>
             <b-button
-              id="pwBtn"
+              :id="pwId + 'Btn'"
               variant="outline-secondary"
               :disabled="!enabled"
               @click="pwToggle"
@@ -68,9 +70,11 @@
             </b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-form-invalid-feedback align="left" :state="validation">
-          Password cannot be blank!
-        </b-form-invalid-feedback>
+        <div :hidden="!enabled">
+          <b-form-invalid-feedback align="left" :state="validate.pw">
+            Password cannot be blank!
+          </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </b-col>
   </b-row>
@@ -91,12 +95,17 @@ export default {
       type: Boolean,
       required: true
     },
-    validation: Boolean
+    validate: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       ssid: null,
-      pw: '',
+      pw: null,
+      ssidId: `ssid${this.role}`,
+      pwId: `pw${this.role}`,
       ssidLabel: this.role + '. defined SSID:',
       pwLabel: this.role + ". defined SSID's password:"
     }

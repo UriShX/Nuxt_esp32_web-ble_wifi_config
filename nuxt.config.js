@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/espconfig.client'],
+  plugins: ['~/plugins/espconfig.client', '~/plugins/vuelidate.client'],
   /*
    ** Nuxt.js dev-modules
    */

@@ -17,7 +17,8 @@
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0",
     "nuxt": "^2.0.0",
-    "nuxt-material-design-icons": "^1.0.4"
+    "nuxt-material-design-icons": "^1.0.4",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
