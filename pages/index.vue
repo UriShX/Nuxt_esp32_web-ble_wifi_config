@@ -4,6 +4,7 @@
       <b-alert
         :show="dismissCountDown"
         dismissible
+        style="width:90%"
         @dismissed="dismissCountDown = 0"
         @dismiss-count-down="countDownChanged"
       >
@@ -22,7 +23,7 @@
         ></b-progress>
       </b-alert>
     </b-row>
-    <config id="config" />
+    <config />
   </div>
 </template>
 
