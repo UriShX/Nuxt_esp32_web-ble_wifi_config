@@ -114,6 +114,7 @@ export default {
       pwLabel: this.role + ". defined SSID's password:"
     }
   },
+  watch: {},
   methods: {
     pwToggle() {
       const pwField = this.$refs.pw
@@ -151,7 +152,9 @@ export default {
         fieldRef = this.$refs.pw
       }
 
-      this.$parent.getJsonFromChild(
+      // this.$parent.getJsonFromChild(
+      this.$store.dispatch(
+        'setForm',
         `{"${fieldName}${this.role}":"${
           fieldRef.querySelector('input').value
         }"}`

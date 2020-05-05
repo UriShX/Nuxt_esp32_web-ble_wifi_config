@@ -82,7 +82,7 @@ export default {
         ssidSec: null,
         pwSec: null
       },
-      wifiList: ['abc', 'Kuki'],
+      wifiList: [],
       dropdownMessage: '-- SSID from ESP32 --',
       secEnabled: false
     }
@@ -179,22 +179,15 @@ export default {
     // Finally decode as ASCII text, and parse as JSON
     async recieveCredentials() {
       let jsonRecieved
-      // let jsonStringToSend
-      // alert(data);
       const decoder = new TextDecoder('windows-1252')
 
       await this.$espconfig
         .readCredentials()
         .then((value) => {
-          // eslint-disable-next-line
-          console.log(value)
-          // console.log(decoder.decode(value));
-
           jsonRecieved = jsonEncodeDecode(this.apName, value)
           jsonRecieved = decoder.decode(jsonRecieved)
-          // console.log(jsonRecieved); // debug
+          this.$store.dispatch('setForm', jsonRecieved)
           jsonRecieved = JSON.parse(jsonRecieved)
-          // console.log(jsonRecieved);  // debug
           return jsonRecieved
         })
         .then((jsonRecieved) => {
