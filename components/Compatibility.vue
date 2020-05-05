@@ -46,12 +46,7 @@ export default {
   mounted() {
     this.environmentVars = navigatorCheck()
 
-    if (this.btAvailable) {
-      this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
-      this.$espconfig.setConnectionStatusUuid(
-        '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
-      ) // Notification, wifi connection status UUID
-    } else {
+    if (!this.btAvailable) {
       if (this.environmentVars.os === '') {
         this.availabiltyMessage.push(
           'Your OS does not yet provide support for the web-bluetooth protocolYour OS.'

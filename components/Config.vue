@@ -11,6 +11,7 @@
       ref="Prim"
       role="Prim"
       :wifilist="wifiList"
+      :dropdown-message="dropdownMessage"
       :enabled="btStat"
       :validate="{
         ssid: validateState('ssidPrim'),
@@ -34,6 +35,7 @@
       ref="Sec"
       role="Sec"
       :wifilist="wifiList"
+      :dropdown-message="dropdownMessage"
       :enabled="secEnabled && btStat"
       :validate="{
         ssid: validateState('ssidSec'),
@@ -65,6 +67,7 @@ import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 import InputPair from '~/components/InputPair'
+import { jsonEncodeDecode } from '~/assets/string_helpers'
 
 export default {
   components: {
@@ -80,13 +83,28 @@ export default {
         pwSec: null
       },
       wifiList: ['abc', 'Kuki'],
+      dropdownMessage: '-- SSID from ESP32 --',
       secEnabled: false
     }
   },
   computed: {
     ...mapState({
-      btStat: (state) => state.connected
+      btStat: (state) => state.connected,
+      apName: (state) => state.APName
     })
+  },
+  watch: {
+    btStat(newVal, oldVal) {
+      if (newVal === true) {
+        this.recieveCredentials()
+      } else {
+        this.dropdownMessage = '-- SSID from ESP32 --'
+        this.form.ssidPrim = null
+        this.form.pwPrim = null
+        this.form.ssidSec = null
+        this.form.pwSec = null
+      }
+    }
   },
   validations: {
     form: {
@@ -105,6 +123,16 @@ export default {
     }
   },
   methods: {
+    getJsonFromChild(formElement) {
+      const formObject = JSON.parse(formElement)
+      if (
+        Object.prototype.hasOwnProperty.call(this.form, Object.keys(formObject))
+      ) {
+        Object.defineProperty(this.form, Object.keys(formObject), {
+          value: Object.values(formObject)[0]
+        })
+      }
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name]
       return $dirty ? !$error : null
@@ -146,6 +174,56 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+    },
+    // Recieve int8Array from ESP32 utility, then XOR with device name.
+    // Finally decode as ASCII text, and parse as JSON
+    async recieveCredentials() {
+      let jsonRecieved
+      // let jsonStringToSend
+      // alert(data);
+      const decoder = new TextDecoder('windows-1252')
+
+      await this.$espconfig
+        .readCredentials()
+        .then((value) => {
+          // eslint-disable-next-line
+          console.log(value)
+          // console.log(decoder.decode(value));
+
+          jsonRecieved = jsonEncodeDecode(this.apName, value)
+          jsonRecieved = decoder.decode(jsonRecieved)
+          // console.log(jsonRecieved); // debug
+          jsonRecieved = JSON.parse(jsonRecieved)
+          // console.log(jsonRecieved);  // debug
+          return jsonRecieved
+        })
+        .then((jsonRecieved) => {
+          // Update fields (knockout observables)
+          this.form.ssidPrim = jsonRecieved.ssidPrim
+          this.form.pwPrim = jsonRecieved.pwPrim
+          this.form.ssidSec = jsonRecieved.ssidSec
+          this.form.pwSec = jsonRecieved.pwSec
+        })
+        .then(() => {
+          if (this.$espconfig.ssidListUuid) {
+            this.dropdownMessage = 'Updating SSIDs from device...'
+            this.$espconfig.readSsidlist().then((value) => {
+              if (value) {
+                this.dropdownMessage = 'SSID seen by device'
+                value = decoder.decode(value)
+                value = JSON.parse(value)
+                this.wifiList = value.SSID
+                // console.log(value);
+                return value
+              } else this.dropdownMessage = '-- SSID from ESP32 --'
+            })
+          }
+        })
+      // .then(() => {
+      //   if (this.$espconfig.connectionStatusUuid) {
+      //     // this.$espconfig.startConnectionstatusNotifications(statusUpdate)
+      //   }
+      // })
     }
   }
 }

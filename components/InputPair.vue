@@ -27,7 +27,7 @@
             >
               <template v-slot:first>
                 <b-form-select-option :value="null" disabled>
-                  -- SSID from ESP32 --
+                  {{ dropdownMessage }}
                 </b-form-select-option>
               </template>
             </b-form-select>
@@ -91,6 +91,10 @@ export default {
       type: Array,
       required: true
     },
+    dropdownMessage: {
+      type: String,
+      default: '-- SSID from ESP32 --'
+    },
     enabled: {
       type: Boolean,
       required: true
@@ -124,7 +128,7 @@ export default {
     },
 
     passByRef(e) {
-      // Works but with eval. Not a good solution.
+      // A bit of a brute force approach, but better then eval()
 
       let fieldName
       let fieldRef
@@ -147,11 +151,10 @@ export default {
         fieldRef = this.$refs.pw
       }
 
-      // eslint-disable-next-line
-      eval(
-        `this.$parent.form.${fieldName}${this.role} = "${
+      this.$parent.getJsonFromChild(
+        `{"${fieldName}${this.role}":"${
           fieldRef.querySelector('input').value
-        }"`
+        }"}`
       )
     }
   }

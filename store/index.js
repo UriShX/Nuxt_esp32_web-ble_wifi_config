@@ -1,14 +1,18 @@
 export const state = () => ({
   available: false,
-  connected: false
+  connected: false,
+  APName: ''
 })
 
 export const mutations = {
   availableStat(state, currStat) {
     state.available = currStat
   },
-  connectionStat(state) {
-    state.connected = !state.connected
+  connectionStat(state, currStat) {
+    state.connected = currStat
+  },
+  apNameState(state, name) {
+    state.APName = name
   }
 }
 
@@ -18,11 +22,14 @@ export const actions = {
   },
   switchConnection({ commit }, btStat) {
     commit('connectionStat', btStat)
+  },
+  setApName({ commit }, name) {
+    commit('apNameState', name)
   }
 }
 
 export const getters = {
-  setAvailability(state) {
+  getAvailability(state) {
     return state.available
   },
   getConnection(state) {

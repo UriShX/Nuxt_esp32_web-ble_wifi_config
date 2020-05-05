@@ -54,13 +54,20 @@ export default {
 
     if (!this.btAvailable) {
       this.btIcon = 'bluetooth_disabled'
+    } else {
+      this.setEspConfig()
     }
   },
   methods: {
+    setEspConfig() {
+      this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
+      this.$espconfig.setConnectionStatusUuid(
+        '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
+      ) // Notification, wifi connection status UUID
+    },
     async btConnect() {
       if (!this.btStat) {
-        this.btBtnText = 'Connecting... '
-        this.btIcon = 'bluetooth_searching'
+        this.btnHandler('searching')
         // Request the device for connection and get its name after successful connection.
         await this.$espconfig
           .request()
@@ -69,22 +76,40 @@ export default {
             // this.$espconfig.recieveCredentials()
             // this.btStat = !this.btStat
             this.$store.dispatch('switchConnection', !this.btStat)
-            this.btBtnText = 'Disconnect '
-            this.btIcon = 'bluetooth_connected'
+            this.btnHandler('disconnect')
+          })
+          .then((_) => {
+            const APName = this.$espconfig.device.name
+            this.$store.dispatch('setApName', APName)
           })
           .catch((error) => {
             // eslint-disable-next-line
             console.log(error)
-            this.btBtnText = 'Connect '
-            this.btIcon = 'bluetooth'
+            this.btnHandler('connect')
           })
       } else {
         // Disconnect from the connected device.
         await this.$espconfig.disconnect()
         // this.btStat = !this.btStat
         this.$store.dispatch('switchConnection', !this.btStat)
-        this.btBtnText = 'Connect '
-        this.btIcon = 'bluetooth'
+        this.btnHandler('connect')
+        this.$store.dispatch('setApName', '')
+      }
+    },
+    btnHandler(status) {
+      switch (status) {
+        case 'connect':
+          this.btBtnText = 'Connect '
+          this.btIcon = 'bluetooth'
+          break
+        case 'disconnect':
+          this.btBtnText = 'Disconnect '
+          this.btIcon = 'bluetooth_connected'
+          break
+        case 'searching':
+          this.btBtnText = 'Connecting... '
+          this.btIcon = 'bluetooth_searching'
+          break
       }
     }
   }
