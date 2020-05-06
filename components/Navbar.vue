@@ -76,6 +76,18 @@ export default {
       this.$espconfig.setConnectionStatusUuid(
         '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
       ) // Notification, wifi connection status UUID
+
+      /** These two functions handle connect and disconnect events */
+      this.$espconfig.setOnConnected(() => {
+        this.$store.dispatch('switchConnection', true)
+        this.btnHandler('disconnect')
+        this.$store.dispatch('setApName', this.$espconfig.device.name)
+      })
+      this.$espconfig.setOnDisconnected(() => {
+        this.$store.dispatch('switchConnection', false)
+        this.btnHandler('connect')
+        this.$store.dispatch('setApName', '')
+      })
     },
     async btConnect() {
       if (!this.btStat) {
@@ -84,16 +96,6 @@ export default {
         await this.$espconfig
           .request()
           .then((_) => this.$espconfig.connect())
-          .then((_) => {
-            // this.$espconfig.recieveCredentials()
-            // this.btStat = !this.btStat
-            this.$store.dispatch('switchConnection', !this.btStat)
-            this.btnHandler('disconnect')
-          })
-          .then((_) => {
-            const APName = this.$espconfig.device.name
-            this.$store.dispatch('setApName', APName)
-          })
           .catch((error) => {
             // eslint-disable-next-line
             console.log(error)
@@ -102,10 +104,6 @@ export default {
       } else {
         // Disconnect from the connected device.
         await this.$espconfig.disconnect()
-        // this.btStat = !this.btStat
-        this.$store.dispatch('switchConnection', !this.btStat)
-        this.btnHandler('connect')
-        this.$store.dispatch('setApName', '')
       }
     },
     btnHandler(status) {
