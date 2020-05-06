@@ -57,5 +57,17 @@ export const getters = {
   },
   getConnection(state) {
     return state.connected
+  },
+  getPrimSsid(state) {
+    return state.form.ssidPrim
+  },
+  getSecSsid(state) {
+    return state.form.ssidSec
+  },
+  getPrimPw(state) {
+    return state.form.pwPrim
+  },
+  getSecPw(state) {
+    return state.form.pwSec
   }
 }

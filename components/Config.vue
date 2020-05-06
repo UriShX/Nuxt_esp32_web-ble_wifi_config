@@ -99,10 +99,7 @@ export default {
         this.recieveCredentials()
       } else {
         this.dropdownMessage = '-- SSID from ESP32 --'
-        this.form.ssidPrim = null
-        this.form.pwPrim = null
-        this.form.ssidSec = null
-        this.form.pwSec = null
+        this.$store.dispatch('setForm', JSON.stringify(this.form))
       }
     }
   },
@@ -123,16 +120,6 @@ export default {
     }
   },
   methods: {
-    getJsonFromChild(formElement) {
-      const formObject = JSON.parse(formElement)
-      if (
-        Object.prototype.hasOwnProperty.call(this.form, Object.keys(formObject))
-      ) {
-        Object.defineProperty(this.form, Object.keys(formObject), {
-          value: Object.values(formObject)[0]
-        })
-      }
-    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name]
       return $dirty ? !$error : null
@@ -175,9 +162,9 @@ export default {
         this.show = true
       })
     },
-    // Recieve int8Array from ESP32 utility, then XOR with device name.
-    // Finally decode as ASCII text, and parse as JSON
     async recieveCredentials() {
+      // Recieve int8Array from ESP32 utility, then XOR with device name.
+      // Finally decode as ASCII text, and parse as JSON
       let jsonRecieved
       const decoder = new TextDecoder('windows-1252')
 
@@ -187,15 +174,6 @@ export default {
           jsonRecieved = jsonEncodeDecode(this.apName, value)
           jsonRecieved = decoder.decode(jsonRecieved)
           this.$store.dispatch('setForm', jsonRecieved)
-          jsonRecieved = JSON.parse(jsonRecieved)
-          return jsonRecieved
-        })
-        .then((jsonRecieved) => {
-          // Update fields (knockout observables)
-          this.form.ssidPrim = jsonRecieved.ssidPrim
-          this.form.pwPrim = jsonRecieved.pwPrim
-          this.form.ssidSec = jsonRecieved.ssidSec
-          this.form.pwSec = jsonRecieved.pwSec
         })
         .then(() => {
           if (this.$espconfig.ssidListUuid) {
@@ -206,7 +184,6 @@ export default {
                 value = decoder.decode(value)
                 value = JSON.parse(value)
                 this.wifiList = value.SSID
-                // console.log(value);
                 return value
               } else this.dropdownMessage = '-- SSID from ESP32 --'
             })

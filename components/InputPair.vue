@@ -114,7 +114,26 @@ export default {
       pwLabel: this.role + ". defined SSID's password:"
     }
   },
-  watch: {},
+  computed: {
+    ssidGetter() {
+      return this.$store.getters[`get${this.role}Ssid`]
+    },
+    pwGetter() {
+      return this.$store.getters[`get${this.role}Pw`]
+    }
+  },
+  watch: {
+    ssidGetter(newSsid, oldSsid) {
+      if (newSsid !== this.ssid) {
+        this.ssid = newSsid
+      }
+    },
+    pwGetter(newPw, oldPw) {
+      if (newPw !== this.pw) {
+        this.pw = newPw
+      }
+    }
+  },
   methods: {
     pwToggle() {
       const pwField = this.$refs.pw
@@ -129,6 +148,7 @@ export default {
     },
 
     passByRef(e) {
+      // Updating fields directly in store
       // A bit of a brute force approach, but better then eval()
 
       let fieldName
