@@ -67,7 +67,7 @@ import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 import InputPair from '~/components/InputPair'
-import { jsonEncodeDecode } from '~/assets/string_helpers'
+import { jsonEncodeDecode, jsonAssemble } from '~/assets/string_helpers'
 
 export default {
   components: {
@@ -76,18 +76,21 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      form: {
-        ssidPrim: null,
-        pwPrim: null,
-        ssidSec: null,
-        pwSec: null
-      },
+      // form: {
+      //   ssidPrim: null,
+      //   pwPrim: null,
+      //   ssidSec: null,
+      //   pwSec: null
+      // },
       wifiList: [],
       dropdownMessage: '-- SSID from ESP32 --',
       secEnabled: false
     }
   },
   computed: {
+    form() {
+      return this.$store.getters.getForm
+    },
     ...mapState({
       btStat: (state) => state.connected,
       apName: (state) => state.APName
@@ -99,7 +102,15 @@ export default {
         this.recieveCredentials()
       } else {
         this.dropdownMessage = '-- SSID from ESP32 --'
-        this.$store.dispatch('setForm', JSON.stringify(this.form))
+        this.$store.dispatch(
+          'setForm',
+          JSON.stringify({
+            ssidPrim: null,
+            pwPrim: null,
+            ssidSec: null,
+            pwSec: null
+          })
+        )
       }
     }
   },
@@ -126,25 +137,29 @@ export default {
     },
     eraseSSIDs() {
       // Reset our form values
-      this.form.ssidPrim = ''
-      this.form.pwPrim = ''
-      this.form.ssidSec = ''
-      this.form.pwSec = ''
+      this.form.ssidPrim = null
+      this.form.pwPrim = null
+      this.form.ssidSec = null
+      this.form.pwSec = null
 
       try {
         this.$refs.Prim.ssid = null
         this.$refs.Prim.pw = null
         this.$refs.Sec.ssid = null
-        this.$refs.Sec = null
+        this.$refs.Sec.pw = null
       } catch (error) {
         alert(error)
       }
     },
     onSubmit(evt) {
+      // this.form = this.$store.getters.getForm
+
       if (!this.form.ssidSec && !this.form.pwSec && !this.secEnabled) {
-        this.form.ssidSec = this.form.ssidPrim
+        this.$store.dispatch(
+          'setForm',
+          `{"ssidSec":"${this.form.ssidPrim}","pwSec":"${this.form.pwPrim}"}`
+        )
         this.validateState('ssidSec')
-        this.form.pwSec = this.form.pwPrim
         this.validateState('pwSec')
       }
 
@@ -153,7 +168,16 @@ export default {
         return
       }
 
-      alert(JSON.stringify(this.form))
+      this.$espconfig.writeCredentials(jsonAssemble(this.apName, this.form))
+
+      // this.form = {
+      //   ssidPrim: null,
+      //   pwPrim: null,
+      //   ssidSec: null,
+      //   pwSec: null
+      // }
+
+      this.recieveCredentials()
     },
     onReset() {
       // Trick to reset/clear native browser form validation state

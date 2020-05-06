@@ -60,6 +60,18 @@ export default {
   },
   methods: {
     setEspConfig() {
+      /** Change these variables to match your device
+       *  The name prefix, service uuid & credentials uuid are those set as default in
+       *  ~/assets/espconfig.js, to match those set in Bernd Giesecke's ESP32 Arduino sketch
+       *  found here: https://desire.giesecke.tk/index.php/2018/04/06/esp32-wifi-setup-over-ble/
+       *
+       *  Those defaults also match my later implementation. Ontop of that, my sketch adds ssid
+       *  scan list and connection status, which are not set as default in ~/assets/espconfig.js,
+       *  and are therefor added here.
+       */
+      // this.$espconfig.setNamePrefix('ESP32')
+      // this.$espconfig.setServiceUuid('0000aaaa-ead2-11e7-80c1-9a214cf093ae')
+      // this.$espconfig.setCredentialsUuid('00005555-ead2-11e7-80c1-9a214cf093ae')
       this.$espconfig.setSsidListUuid('1d338124-7ddc-449e-afc7-67f8673a1160') // SSID list characteristic. Read only.
       this.$espconfig.setConnectionStatusUuid(
         '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'

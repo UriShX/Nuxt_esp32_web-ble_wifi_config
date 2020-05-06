@@ -134,6 +134,18 @@ export default {
       }
     }
   },
+  mounted() {
+    const storeSsid = this.ssidGetter
+    const storePw = this.pwGetter
+
+    if (storeSsid !== this.ssid) {
+      this.ssid = storeSsid
+    }
+
+    if (storePw !== this.pw) {
+      this.pw = storePw
+    }
+  },
   methods: {
     pwToggle() {
       const pwField = this.$refs.pw

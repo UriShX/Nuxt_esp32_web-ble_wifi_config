@@ -58,6 +58,9 @@ export const getters = {
   getConnection(state) {
     return state.connected
   },
+  getForm(state) {
+    return state.form
+  },
   getPrimSsid(state) {
     return state.form.ssidPrim
   },
