@@ -50,12 +50,7 @@
       <b-button id="eraseSSIDs" variant="secondary" @click="eraseSSIDs">
         Erase
       </b-button>
-      <b-button
-        id="resetSSIDs"
-        type="reset"
-        variant="secondary"
-        @click="eraseSSIDs"
-      >
+      <b-button id="resetSSIDs" type="reset" variant="secondary">
         Reset
       </b-button>
     </b-col>
@@ -136,24 +131,22 @@ export default {
       return $dirty ? !$error : null
     },
     eraseSSIDs() {
-      // Reset our form values
-      this.form.ssidPrim = null
-      this.form.pwPrim = null
-      this.form.ssidSec = null
-      this.form.pwSec = null
+      // // Reset our form values
+      // this.$store.dispatch(
+      //   'setForm',
+      //   JSON.stringify({
+      //     ssidPrim: null,
+      //     pwPrim: null,
+      //     ssidSec: null,
+      //     pwSec: null
+      //   })
+      // )
 
-      try {
-        this.$refs.Prim.ssid = null
-        this.$refs.Prim.pw = null
-        this.$refs.Sec.ssid = null
-        this.$refs.Sec.pw = null
-      } catch (error) {
-        alert(error)
-      }
+      this.$espconfig.writeCredentials(jsonAssemble(this.apName, { erase: '' }))
+
+      this.recieveCredentials()
     },
     onSubmit(evt) {
-      // this.form = this.$store.getters.getForm
-
       if (!this.form.ssidSec && !this.form.pwSec && !this.secEnabled) {
         this.$store.dispatch(
           'setForm',
@@ -170,13 +163,6 @@ export default {
 
       this.$espconfig.writeCredentials(jsonAssemble(this.apName, this.form))
 
-      // this.form = {
-      //   ssidPrim: null,
-      //   pwPrim: null,
-      //   ssidSec: null,
-      //   pwSec: null
-      // }
-
       this.recieveCredentials()
     },
     onReset() {
@@ -185,6 +171,8 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+
+      this.$espconfig.writeCredentials(jsonAssemble(this.apName, { reset: '' }))
     },
     async recieveCredentials() {
       // Recieve int8Array from ESP32 utility, then XOR with device name.
