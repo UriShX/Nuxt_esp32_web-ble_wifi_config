@@ -44,13 +44,28 @@
     />
 
     <b-col cols="11">
-      <b-button id="setSSIDs" type="submit" variant="primary">
+      <b-button
+        id="setSSIDs"
+        type="submit"
+        variant="primary"
+        :disabled="!btStat"
+      >
         Configure device
       </b-button>
-      <b-button id="eraseSSIDs" variant="secondary" @click="eraseSSIDs">
+      <b-button
+        id="eraseSSIDs"
+        variant="secondary"
+        :disabled="!btStat"
+        @click="eraseSSIDs"
+      >
         Erase
       </b-button>
-      <b-button id="resetSSIDs" type="reset" variant="secondary">
+      <b-button
+        id="resetSSIDs"
+        type="reset"
+        variant="secondary"
+        :disabled="!btStat"
+      >
         Reset
       </b-button>
     </b-col>
