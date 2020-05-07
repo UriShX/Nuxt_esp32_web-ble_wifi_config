@@ -176,6 +176,7 @@ export default {
   },
   mounted() {
     if (this.btStat) {
+      if (!this.storedOnDevice.ssidPrim) this.recieveCredentials()
       this.recieveWifiList()
       this.notificationHandler()
     }
