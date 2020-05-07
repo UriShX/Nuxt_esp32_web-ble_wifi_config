@@ -130,9 +130,6 @@ export default {
         }
       },
       set(val) {
-        // eslint-disable-next-line
-        console.log(val)
-
         this.ssid = val
       }
     }

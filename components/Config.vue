@@ -86,12 +86,6 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      // form: {
-      //   ssidPrim: null,
-      //   pwPrim: null,
-      //   ssidSec: null,
-      //   pwSec: null
-      // },
       wifiList: [],
       dropdownMessage: '-- SSID from ESP32 --',
       secEnabled: false
@@ -140,23 +134,17 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.btStat) {
+      this.recieveWifiList()
+    }
+  },
   methods: {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name]
       return $dirty ? !$error : null
     },
     eraseSSIDs() {
-      // // Reset our form values
-      // this.$store.dispatch(
-      //   'setForm',
-      //   JSON.stringify({
-      //     ssidPrim: null,
-      //     pwPrim: null,
-      //     ssidSec: null,
-      //     pwSec: null
-      //   })
-      // )
-
       this.$espconfig.writeCredentials(jsonAssemble(this.apName, { erase: '' }))
 
       this.recieveCredentials()
@@ -202,25 +190,27 @@ export default {
           jsonRecieved = decoder.decode(jsonRecieved)
           this.$store.dispatch('setForm', jsonRecieved)
         })
-        .then(() => {
-          if (this.$espconfig.ssidListUuid) {
-            this.dropdownMessage = 'Updating SSIDs from device...'
-            this.$espconfig.readSsidlist().then((value) => {
-              if (value) {
-                this.dropdownMessage = 'SSID seen by device'
-                value = decoder.decode(value)
-                value = JSON.parse(value)
-                this.wifiList = value.SSID
-                return value
-              } else this.dropdownMessage = '-- SSID from ESP32 --'
-            })
-          }
-        })
+        .then(this.recieveWifiList())
       // .then(() => {
       //   if (this.$espconfig.connectionStatusUuid) {
       //     // this.$espconfig.startConnectionstatusNotifications(statusUpdate)
       //   }
       // })
+    },
+    async recieveWifiList() {
+      if (this.$espconfig.ssidListUuid) {
+        const decoder = new TextDecoder('windows-1252')
+        this.dropdownMessage = 'Updating SSIDs from device...'
+        await this.$espconfig.readSsidlist().then((value) => {
+          if (value) {
+            this.dropdownMessage = 'SSID seen by device'
+            value = decoder.decode(value)
+            value = JSON.parse(value)
+            this.wifiList = value.SSID
+            return value
+          } else this.dropdownMessage = '-- SSID from ESP32 --'
+        })
+      }
     }
   }
 }
