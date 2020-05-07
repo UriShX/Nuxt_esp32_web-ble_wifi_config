@@ -20,7 +20,7 @@
           <b-input-group-append class="w-50">
             <b-form-select
               :id="ssidId + '-select'"
-              v-model="ssid"
+              v-model="ddSsid"
               :disabled="!enabled"
               :options="wifilist"
               @change="passByRef"
@@ -120,6 +120,21 @@ export default {
     },
     pwGetter() {
       return this.$store.getters[`get${this.role}Pw`]
+    },
+    ddSsid: {
+      get() {
+        if (this.wifilist.includes(this.ssid)) {
+          return this.ssid
+        } else {
+          return null
+        }
+      },
+      set(val) {
+        // eslint-disable-next-line
+        console.log(val)
+
+        this.ssid = val
+      }
     }
   },
   watch: {
@@ -184,7 +199,6 @@ export default {
         fieldRef = this.$refs.pw
       }
 
-      // this.$parent.getJsonFromChild(
       this.$store.dispatch(
         'setForm',
         `{"${fieldName}${this.role}":"${

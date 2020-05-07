@@ -77,7 +77,7 @@ export default {
         '5b3595c4-ad4f-4e1e-954e-3b290cc02eb0'
       ) // Notification, wifi connection status UUID
 
-      /** These two functions handle connect and disconnect events */
+      /** The following two functions handle connect and disconnect events */
       this.$espconfig.setOnConnected(() => {
         this.$store.dispatch('switchConnection', true)
         this.btnHandler('disconnect')
