@@ -1,75 +1,100 @@
 <template>
-  <b-form
-    id="my-form"
-    method="POST"
-    class="row needs-validation"
-    novalidate
-    @submit.prevent="onSubmit"
-    @reset.prevent="onReset"
-  >
-    <InputPair
-      ref="Prim"
-      role="Prim"
-      :wifilist="wifiList"
-      :dropdown-message="dropdownMessage"
-      :enabled="btStat"
-      :validate="{
-        ssid: validateState('ssidPrim'),
-        pw: validateState('pwPrim')
-      }"
-    />
+  <div>
+    <b-row align-h="start">
+      <b-col col cols="11">
+        <b-alert show variant="info">
+          <b-row>
+            <b-col>
+              <span v-if="!btStat">
+                Waiting for connection...
+              </span>
+              <span v-else>
+                {{ connectionStatus }}
+              </span>
+            </b-col>
+            <b-col col cols="1">
+              <a :hidden="!btStat" @click="recieveCredentials">
+                <i class="material-icons material-sm-font">
+                  refresh
+                </i>
+              </a>
+            </b-col>
+          </b-row>
+        </b-alert>
+      </b-col>
+    </b-row>
+    <b-form
+      id="my-form"
+      method="POST"
+      class="row needs-validation"
+      novalidate
+      @submit.prevent="onSubmit"
+      @reset.prevent="onReset"
+    >
+      <InputPair
+        ref="Prim"
+        role="Prim"
+        :wifilist="wifiList"
+        :dropdown-message="dropdownMessage"
+        :enabled="btStat"
+        :validate="{
+          ssid: validateState('ssidPrim'),
+          pw: validateState('pwPrim')
+        }"
+      />
 
-    <b-form-row>
-      <b-form-checkbox
-        id="checkbox-1"
-        v-model="secEnabled"
-        :disabled="!btStat"
-        name="checkbox-1"
-        class="ml-2"
-        switch
-      >
-        Configure Secondary SSID
-      </b-form-checkbox>
-    </b-form-row>
-    <InputPair
-      ref="Sec"
-      role="Sec"
-      :wifilist="wifiList"
-      :dropdown-message="dropdownMessage"
-      :enabled="secEnabled && btStat"
-      :validate="{
-        ssid: validateState('ssidSec'),
-        pw: validateState('pwSec')
-      }"
-    />
+      <b-form-row>
+        <b-form-checkbox
+          id="checkbox-1"
+          v-model="secEnabled"
+          :disabled="!btStat"
+          name="checkbox-1"
+          class="ml-2"
+          switch
+        >
+          Configure Secondary SSID
+        </b-form-checkbox>
+      </b-form-row>
+      <InputPair
+        ref="Sec"
+        role="Sec"
+        :wifilist="wifiList"
+        :dropdown-message="dropdownMessage"
+        :enabled="secEnabled && btStat"
+        :validate="{
+          ssid: validateState('ssidSec'),
+          pw: validateState('pwSec')
+        }"
+      />
 
-    <b-col cols="11">
-      <b-button
-        id="setSSIDs"
-        type="submit"
-        variant="primary"
-        :disabled="!btStat"
-      >
-        Configure device
-      </b-button>
-      <b-button
-        id="eraseSSIDs"
-        variant="secondary"
-        :disabled="!btStat"
-        @click="eraseSSIDs"
-      >
-        Erase
-      </b-button>
-      <b-button
-        id="resetSSIDs"
-        type="reset"
-        variant="secondary"
-        :disabled="!btStat"
-      >
-        Reset
-      </b-button>
-    </b-col>
-  </b-form>
+      <b-col cols="11">
+        <b-button
+          id="setSSIDs"
+          type="submit"
+          variant="primary"
+          :disabled="!btStat"
+        >
+          Configure device
+        </b-button>
+        <b-button
+          id="eraseSSIDs"
+          variant="secondary"
+          :disabled="!btStat"
+          @click="eraseSSIDs"
+        >
+          Erase
+        </b-button>
+        <b-button
+          id="resetSSIDs"
+          type="reset"
+          variant="secondary"
+          :disabled="!btStat"
+        >
+          Reset
+        </b-button>
+      </b-col>
+    </b-form>
+  </div>
 </template>
 
 <script>
@@ -86,6 +111,7 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
+      connectionStatus: 'Device is not connected',
       wifiList: [],
       dropdownMessage: '-- SSID from ESP32 --',
       secEnabled: false
@@ -97,13 +123,19 @@ export default {
     },
     ...mapState({
       btStat: (state) => state.connected,
-      apName: (state) => state.APName
+      apName: (state) => state.APName,
+      esp32connected: (state) => state.apStatus,
+      storedOnDevice: (state) => state.onDevice
     })
   },
   watch: {
+    esp32connected(newVal, oldVal) {
+      this.notificationHandler()
+    },
     btStat(newVal, oldVal) {
       if (newVal === true) {
         this.recieveCredentials()
+        this.notificationHandler()
       } else {
         this.dropdownMessage = '-- SSID from ESP32 --'
         this.$store.dispatch(
@@ -115,6 +147,14 @@ export default {
             pwSec: null
           })
         )
+        this.$store.dispatch(
+          'setOnDevice',
+          JSON.stringify({
+            ssidPrim: null,
+            ssidSec: null
+          })
+        )
+        this.$store.dispatch('setApStatus', null)
       }
     }
   },
@@ -137,6 +177,7 @@ export default {
   mounted() {
     if (this.btStat) {
       this.recieveWifiList()
+      this.notificationHandler()
     }
   },
   methods: {
@@ -189,13 +230,16 @@ export default {
           jsonRecieved = jsonEncodeDecode(this.apName, value)
           jsonRecieved = decoder.decode(jsonRecieved)
           this.$store.dispatch('setForm', jsonRecieved)
+          this.$store.dispatch('setOnDevice', jsonRecieved)
         })
         .then(this.recieveWifiList())
-      // .then(() => {
-      //   if (this.$espconfig.connectionStatusUuid) {
-      //     // this.$espconfig.startConnectionstatusNotifications(statusUpdate)
-      //   }
-      // })
+        .then(() => {
+          if (this.$espconfig.connectionStatusUuid) {
+            this.$espconfig.startConnectionstatusNotifications((event) => {
+              this.$store.dispatch('setApStatus', event.target.value.getUint8())
+            })
+          }
+        })
     },
     async recieveWifiList() {
       if (this.$espconfig.ssidListUuid) {
@@ -211,6 +255,18 @@ export default {
           } else this.dropdownMessage = '-- SSID from ESP32 --'
         })
       }
+    },
+    notificationHandler() {
+      if (this.esp32connected === 0)
+        this.connectionStatus = 'ESP32 is not connected to WiFi AP'
+      else if (!this.storedOnDevice.ssidPrim && !this.storedOnDevice.ssidSec) {
+        setTimeout(() => {
+          this.notificationHandler()
+        }, 250)
+      } else if (this.esp32connected === 1)
+        this.connectionStatus = `ESP32 connected to ${this.storedOnDevice.ssidPrim}`
+      else if (this.esp32connected === 2)
+        this.connectionStatus = `ESP32 connected to ${this.storedOnDevice.ssidSec}`
     }
   }
 }

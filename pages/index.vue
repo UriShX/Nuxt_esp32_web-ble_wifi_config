@@ -4,7 +4,7 @@
       <b-alert
         :show="dismissCountDown"
         dismissible
-        style="width:90%"
+        style="width:93%"
         @dismissed="dismissCountDown = 0"
         @dismiss-count-down="countDownChanged"
       >

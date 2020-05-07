@@ -7,6 +7,11 @@ export const state = () => ({
     pwPrim: null,
     ssidSec: null,
     pwSec: null
+  },
+  apStatus: null,
+  onDevice: {
+    ssidPrim: null,
+    ssidSec: null
   }
 })
 
@@ -21,18 +26,25 @@ export const mutations = {
     state.APName = name
   },
   formMutation(state, recievedObj) {
-    const formObject = JSON.parse(recievedObj)
+    let formSelector = recievedObj[0]
+    const formObject = JSON.parse(recievedObj[1])
+
+    if (formSelector === 'form') formSelector = state.form
+    else if (formSelector === 'onDevice') formSelector = state.onDevice
 
     for (let i = 0; i < Object.keys(formObject).length; i++) {
       if (
         Object.prototype.hasOwnProperty.call(
-          state.form,
+          formSelector,
           Object.keys(formObject)[i]
         )
       ) {
-        state.form[Object.keys(formObject)[i]] = Object.values(formObject)[i]
+        formSelector[Object.keys(formObject)[i]] = Object.values(formObject)[i]
       }
     }
+  },
+  apStatusMutation(state, code) {
+    state.apStatus = code
   }
 }
 
@@ -47,7 +59,13 @@ export const actions = {
     commit('apNameState', name)
   },
   setForm({ commit }, formJson) {
-    commit('formMutation', formJson)
+    commit('formMutation', ['form', formJson])
+  },
+  setOnDevice({ commit }, formJson) {
+    commit('formMutation', ['onDevice', formJson])
+  },
+  setApStatus({ commit }, code) {
+    commit('apStatusMutation', code)
   }
 }
 
@@ -60,6 +78,9 @@ export const getters = {
   },
   getForm(state) {
     return state.form
+  },
+  getOnDevice(state) {
+    return state.onDevice
   },
   getPrimSsid(state) {
     return state.form.ssidPrim
