@@ -4,9 +4,9 @@
       <b-col cols="1" class="ml-2">
         <b-navbar v-b-scrollspy:reltive-pos class="flex-column">
           <b-nav pills small vertical>
-            <b-nav-item href="#about">About</b-nav-item>
-            <b-nav-item href="#description">Description</b-nav-item>
-            <b-nav-item href="#usage">Usage</b-nav-item>
+            <b-nav-item href="about#about">About</b-nav-item>
+            <b-nav-item href="about#description">Description</b-nav-item>
+            <b-nav-item href="about#usage">Usage</b-nav-item>
           </b-nav>
         </b-navbar>
       </b-col>

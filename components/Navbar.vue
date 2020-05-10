@@ -100,6 +100,7 @@ export default {
             // eslint-disable-next-line
             // console.log(error)
             this.btnHandler('connect')
+            throw error
           })
       } else {
         // Disconnect from the connected device.
