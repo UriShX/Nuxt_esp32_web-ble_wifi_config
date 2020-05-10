@@ -164,7 +164,7 @@ class Espconfig {
       .then((service) => service.getCharacteristic(this.ssidListUuid))
       .then((characteristic) => characteristic.readValue())
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
         return null
       })
   }
@@ -178,7 +178,7 @@ class Espconfig {
         characteristic.addEventListener('characteristicvaluechanged', listener)
       )
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
         return null
       })
   }
@@ -195,7 +195,7 @@ class Espconfig {
         )
       )
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
         return null
       })
   }
@@ -208,7 +208,7 @@ class Espconfig {
   }
 
   onDisconnected() {
-    console.log('Device is disconnected.')
+    // console.log('Device is disconnected.')
 
     if (this._onDisconnected) {
       this._onDisconnected()
@@ -228,5 +228,5 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 //         espconfig.request()
 //         .then(_ => espconfig.connect())
 //         .then(_ => { /* Do something with espconfig... */})
-//         .catch(error => { console.log(error) });
+//         .catch(error => { // console.log(error) });
 // });

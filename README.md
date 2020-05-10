@@ -3,7 +3,7 @@
 ## General description
 
 A web based app used to configure WiFi credentials over Bluetooth LE, for esp32 based IoT projects. Check it out _[here](https://urishx.github.io/Nuxt_esp32_web-ble_wifi_config/)_. \
-The app is written in NuxtJS, a Vue framework for server side rendered apps. This is a recreation of the app, which was originally written using KnockoutJS and JQuery. The reason for recreating the app was that having the BLE config. and connection parts as Nuxt / Vue Components can help integrate them further into more complex web applications. \
+The app is written in NuxtJS, a Vue framework for server side rendered apps. This is a recreation of the app, which was originally written using KnockoutJS and JQuery. The reason for recreating the app was that having the BLE config. and connection parts as Nuxt / Vue Components can help integrate them further into more complex web applications. One further \
 The app interacts with the esp32 using web-ble, which is a web standard under development. Thus, it is available atm (02/2020) only on Chrome browsers, on OSX Yosemite and later, Windows 10, Linux with required bluez version etc., and Android > 6.0. [click here for current implementation status](https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md)
 
 ## Requirements
@@ -17,7 +17,7 @@ Sadly, there is no support atm for iOS devices, though I believe it can be possi
 
 Bluetooth-LE requires a secure connection over HTTPS. For development, the `nuxt.config.js` file contains links to [server key and certificate files](https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates), [according to Nuxt's documentation](https://nuxtjs.org/api/configuration-server#example-using-https-configuration). The files should either be stored in `~/ssl/`, or the `server` tag in `nuxt.config.js` should be edited to fit. \
  \
-This app was set up to be deployed to [github pages](https://pages.github.com/), according to Nuxt's [guide](https://nuxtjs.org/faq/github-pages#__layout). The `dist` folder is white-listed in `.gitignore`, and can be easily pushed to `gh-pages` branch. More details can be found [here](https://gist.github.com/belohlavek/61dd16c08cd9c57a168408b9ac4121c2).
+This app was set up to be deployed to [github pages](https://pages.github.com/), according to Nuxt's [guide](https://nuxtjs.org/faq/github-pages#__layout). Since the app was built to be static, the `generate.subFolders` property in `nuxt.config,js` was [set to false, to generate separate files](https://nuxtjs.org/api/configuration-generate/#subfolders) for each of the pages. The `dist` folder is white-listed in `.gitignore`, and can be easily pushed to `gh-pages` branch. More details can be found [here](https://gist.github.com/belohlavek/61dd16c08cd9c57a168408b9ac4121c2).
 
 ```bash
 # install dependencies
@@ -26,9 +26,8 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
+# build for production
 $ npm run build
-$ npm run start
 
 # generate static project for github pages deployment
 $ npm run generate:gh-pages
@@ -57,7 +56,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 ## TODO
 
 - Check geolocation spoofing. Android still requests turning on location services, and in testing returns the function from [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js). Not sure if the values are accepted by the navigator.
-- Nuxt app
+-
 - Make app progressive using [Nuxt PWA](https://pwa.nuxtjs.org/).
 - Setting up a device password and authentication scheme, so not everyone can get to the device and read passwords stored on it.
 

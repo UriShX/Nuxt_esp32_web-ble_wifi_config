@@ -98,7 +98,7 @@ export default {
           .then((_) => this.$espconfig.connect())
           .catch((error) => {
             // eslint-disable-next-line
-            console.log(error)
+            // console.log(error)
             this.btnHandler('connect')
           })
       } else {

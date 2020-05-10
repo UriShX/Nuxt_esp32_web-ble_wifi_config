@@ -1,5 +1,5 @@
 export function jsonEncodeDecode(APName, data) {
-  // console.log(value);
+  // // console.log(value);
   let keyIndex = 0
   for (let i = 0; i < data.byteLength; i++) {
     data.setInt8(i, data.getInt8(i) ^ APName.charCodeAt(keyIndex))

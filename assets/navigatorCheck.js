@@ -7,7 +7,7 @@ export default function() {
   // let returnMessage
 
   const _agent = navigator.userAgent
-  // console.log(_agent);
+  // // console.log(_agent);
 
   if (_agent.includes('Linux') || _agent.includes('X11'))
     environment.os = 'unix'
@@ -23,21 +23,21 @@ export default function() {
   // else if (_agent.includes("Windows NT 5.1") ) environment.os = "Windows XP";
 
   if (environment.os === 'unix') {
-    // console.log("found " + environment.os);
+    // // console.log("found " + environment.os);
     if (_agent.includes('Opera')) environment.nav = 'Opera'
     else if (_agent.includes('Chrome')) environment.nav = 'Chromium'
     else if (_agent.includes('Firefox')) environment.nav = 'Firefox'
   }
 
   if (environment.os === 'Windows_10') {
-    // console.log("found " + environment.os);
+    // // console.log("found " + environment.os);
     if (_agent.includes('Opera')) environment.nav = 'Opera'
     else if (_agent.includes('Chrome')) environment.nav = 'Chromium'
     else if (_agent.includes('Firefox')) environment.nav = 'Firefox'
   }
 
   if (environment.os === 'Mac') {
-    // console.log("found " + environment.os);
+    // // console.log("found " + environment.os);
     if (_agent.includes('Opera')) environment.nav = 'Opera'
     else if (_agent.includes('Chrom')) environment.nav = 'Chromium'
     else if (_agent.includes('Firefox')) environment.nav = 'Firefox'
