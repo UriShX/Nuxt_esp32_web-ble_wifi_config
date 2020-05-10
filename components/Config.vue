@@ -13,11 +13,11 @@
               </span>
             </b-col>
             <b-col col cols="1">
-              <a :hidden="!btStat" @click="recieveCredentials">
+              <b-link :hidden="!btStat" @click="recieveCredentials">
                 <i class="material-icons material-sm-font">
                   refresh
                 </i>
-              </a>
+              </b-link>
             </b-col>
           </b-row>
         </b-alert>
@@ -176,7 +176,7 @@ export default {
   },
   mounted() {
     if (this.btStat) {
-      if (!this.storedOnDevice.ssidPrim) this.recieveCredentials()
+      if (!this.form.ssidPrim) this.recieveCredentials()
       this.recieveWifiList()
       this.notificationHandler()
     }
