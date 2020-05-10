@@ -56,7 +56,7 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
     'nuxt-material-design-icons'
   ],
   /*

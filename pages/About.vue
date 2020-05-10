@@ -4,9 +4,9 @@
       <b-col cols="1" class="ml-2">
         <b-navbar v-b-scrollspy:reltive-pos class="flex-column">
           <b-nav pills small vertical>
-            <b-nav-item to="#about">About</b-nav-item>
-            <b-nav-item to="#description">Description</b-nav-item>
-            <b-nav-item to="#usage">Usage</b-nav-item>
+            <b-nav-item href="#about">About</b-nav-item>
+            <b-nav-item href="#description">Description</b-nav-item>
+            <b-nav-item href="#usage">Usage</b-nav-item>
           </b-nav>
         </b-navbar>
       </b-col>
@@ -14,7 +14,7 @@
       <b-col col cols="9" class="ml-2">
         <div id="reltive-pos">
           <h2 id="about" class="mb-6">About</h2>
-          <p>
+          <p id="about-0">
             A web-ble implementation of Bernd Giesecke's
             <a
               href="https://desire.giesecke.tk/index.php/2018/04/06/esp32-wifi-setup-over-ble/"
@@ -32,21 +32,21 @@
             >
             ).
           </p>
-          <p>
+          <p id="about-1">
             The repository for this app is hosted on github
             <a href="https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config"
               >here</a
             >. As implied by it's name, this web app was written using
             <a href="https://nuxtjs.org/">NuxtJS</a>, a VueJS framework.
           </p>
-          <p>
+          <p id="aout-2">
             An older version of this app, based on KnockdownJS and JQuery can be
             found
             <a href="https://github.com/UriShX/esp32_web-ble_wifi_config"
               >here.</a
             >
           </p>
-          <p>
+          <p id="about-3">
             The main reason for re-creating the app in a web framework was to
             enable easier implementation as part of larger web applications,
             such as, for eg., a web site which enables the connection of devices
@@ -58,7 +58,7 @@
           <h3 id="description" class="mb-6">Description</h3>
           <descript />
           <h3 id="usage" class="mb-1">Usage</h3>
-          <p>
+          <p id="usage-0">
             Press the "Connect" button at the top right corner. The app searches
             for Bluetooth-LE devices with a name that starts with "ESP32", and
             has a predefined service UUID. Select the desired device from the
@@ -83,7 +83,7 @@
             ><br />
             You can then edit the desired fields:<br />
           </p>
-          <ul>
+          <ul id="usage-1">
             <li>Enter SSID to "Primary defined SSID", or</li>
             <ul>
               <li>
@@ -132,7 +132,7 @@
               >
             </li>
           </ul>
-          <p>
+          <p id="usage-2">
             After defining the crdentials, you can then press the "Configure
             device" button to send the new configuration to the ESP32.<br />
             Two more buttons are also provided: "Erase" - to erase the current
@@ -146,25 +146,27 @@
               device must be prepared with either of the following beforehand:
             </i>
           </p>
-          <ul>
-            <li>
-              <a href="https://github.com/UriShX/esp32_wifi_ble_advanced">
-                This app,
-              </a>
-              which supports the SSID list and current connection status
-              reporting.
-            </li>
-          </ul>
-          or
-          <ul>
-            <li>
-              <a
-                href="https://desire.giesecke.tk/index.php/2018/04/06/esp32-wifi-setup-over-ble/"
-              >
-                Beegee1962's app </a
-              >, which does not.
-            </li>
-          </ul>
+          <div id="usage-3">
+            <ul>
+              <li>
+                <a href="https://github.com/UriShX/esp32_wifi_ble_advanced">
+                  This app,
+                </a>
+                which supports the SSID list and current connection status
+                reporting.
+              </li>
+            </ul>
+            or
+            <ul>
+              <li>
+                <a
+                  href="https://desire.giesecke.tk/index.php/2018/04/06/esp32-wifi-setup-over-ble/"
+                >
+                  Beegee1962's app </a
+                >, which does not.
+              </li>
+            </ul>
+          </div>
         </div>
       </b-col>
     </b-row>
