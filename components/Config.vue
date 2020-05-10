@@ -154,7 +154,7 @@ export default {
             ssidSec: null
           })
         )
-        this.$store.dispatch('setApStatus', null)
+        this.$store.dispatch('setApStatus', -1)
       }
     }
   },
@@ -258,7 +258,10 @@ export default {
       }
     },
     notificationHandler() {
-      if (this.esp32connected === 0)
+      if (this.esp32connected === -1)
+        this.connectionStatus =
+          'Your device does not support connection status reporting'
+      else if (this.esp32connected === 0)
         this.connectionStatus = 'ESP32 is not connected to WiFi AP'
       else if (!this.storedOnDevice.ssidPrim && !this.storedOnDevice.ssidSec) {
         setTimeout(() => {

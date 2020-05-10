@@ -11,7 +11,9 @@ export default {
     Config
   },
   head() {
-    return { title: 'Configuration Form' }
+    return {
+      title: 'Configuration Form: ESP32 WiFi config tool built w/ Nuxt.js'
+    }
   }
 }
 </script>

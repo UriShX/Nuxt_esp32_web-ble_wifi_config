@@ -8,7 +8,7 @@ export const state = () => ({
     ssidSec: null,
     pwSec: null
   },
-  apStatus: null,
+  apStatus: -1,
   onDevice: {
     ssidPrim: null,
     ssidSec: null

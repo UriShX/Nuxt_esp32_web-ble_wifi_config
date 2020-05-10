@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-form-row>
     <b-col cols="11">
       <b-form-group
         id="ssid-group"
@@ -77,7 +77,7 @@
         </div>
       </b-form-group>
     </b-col>
-  </b-row>
+  </b-form-row>
 </template>
 
 <script>
