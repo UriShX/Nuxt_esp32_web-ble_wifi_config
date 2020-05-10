@@ -68,6 +68,9 @@ export default {
      */
     extend(config, ctx) {}
   },
+  generate: {
+    subFolders: false
+  },
   server: {
     https: {
       key: fs.readFileSync('./ssl/server.key'),

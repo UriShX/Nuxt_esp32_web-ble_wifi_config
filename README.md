@@ -26,6 +26,10 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
+# build for production and launch server
+$ npm run build
+$ npm run start
+
 # generate static project for github pages deployment
 $ npm run generate:gh-pages
 
@@ -45,13 +49,15 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 ##### _Other_
 
-- [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js) is used to prevent the BLE connection from asking permission to use geolocation services.
+- [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js) is used to prevent the BLE connection from asking permission to use geolocation services. _App still requests location services on Android_.
 - [navigatorCheck.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/assets/navigatorCheck.js) contains the method used to check the users' OS and browser for compatibilty with the web-bluetooth standard.
 - App uses the UUIDs Bernd Giesecke's used in his original app to maintain backward compatibility.
 - App searches only for devices with a name that starts with "ESP32", and does not display other devices.
 
 ## TODO
 
+- Check geolocation spoofing. Android still requests turning on location services, and in testing returns the function from [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js). Not sure if the values are accepted by the navigator.
+- Nuxt app
 - Make app progressive using [Nuxt PWA](https://pwa.nuxtjs.org/).
 - Setting up a device password and authentication scheme, so not everyone can get to the device and read passwords stored on it.
 
