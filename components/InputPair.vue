@@ -55,13 +55,14 @@
             type="password"
             :disabled="!enabled"
             placeholder="Enter password"
+            @focus="testPw"
             @blur="passByRef"
           ></b-form-input>
           <b-input-group-append>
             <b-button
               :id="pwId + 'Btn'"
               variant="outline-secondary"
-              :disabled="!enabled"
+              :disabled="!pwEn || !enabled"
               @click="pwToggle"
             >
               <i id="pwEye" class="material-icons material-sm-font">
@@ -70,7 +71,7 @@
             </b-button>
           </b-input-group-append>
         </b-input-group>
-        <div :hidden="!enabled">
+        <div :hidden="!enabled && validate.pw">
           <b-form-invalid-feedback align="left" :state="validate.pw">
             Password cannot be blank!
           </b-form-invalid-feedback>
@@ -111,7 +112,8 @@ export default {
       ssidId: `ssid${this.role}`,
       pwId: `pw${this.role}`,
       ssidLabel: this.role + '. defined SSID:',
-      pwLabel: this.role + ". defined SSID's password:"
+      pwLabel: this.role + ". defined SSID's password:",
+      pwEn: false
     }
   },
   computed: {
@@ -141,9 +143,14 @@ export default {
       }
     },
     pwGetter(newPw, oldPw) {
-      if (newPw !== this.pw) {
-        this.pw = newPw
-      }
+      if (newPw !== this.pw && newPw !== null) {
+        let tmpPw = ''
+        for (let i = 0; i < newPw.length; i++) {
+          tmpPw = tmpPw + '•'
+        }
+        this.pw = tmpPw
+        this.pwEn = false
+      } else if (newPw === null) this.pw = newPw
     }
   },
   mounted() {
@@ -154,9 +161,13 @@ export default {
       this.ssid = storeSsid
     }
 
-    if (storePw !== this.pw) {
-      this.pw = storePw
-    }
+    if (storePw !== this.pw && storePw !== null) {
+      let tmpPw = ''
+      for (let i = 0; i < storePw.length; i++) {
+        tmpPw = tmpPw + '•'
+      }
+      this.pw = tmpPw
+    } else if (storePw === null) this.pw = storePw
   },
   methods: {
     pwToggle() {
@@ -170,7 +181,18 @@ export default {
         pwField.querySelector('i').textContent = 'visibility_off'
       }
     },
-
+    testPw() {
+      let tmpPw = ''
+      if (this.pwGetter !== null) {
+        for (let i = 0; i < this.pwGetter.length; i++) {
+          tmpPw = tmpPw + '•'
+        }
+      }
+      if ((!this.pwEn && this.pw === tmpPw) || this.pw === this.pwGetter) {
+        this.pw = null
+        this.pwEn = true
+      }
+    },
     passByRef(e) {
       // Updating fields directly in store
       // A bit of a brute force approach, but better then eval()

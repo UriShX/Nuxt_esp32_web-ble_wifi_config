@@ -192,11 +192,13 @@ export default {
       this.recieveCredentials()
     },
     onSubmit(evt) {
-      if (!this.form.ssidSec && !this.form.pwSec && !this.secEnabled) {
-        this.$store.dispatch(
-          'setForm',
-          `{"ssidSec":"${this.form.ssidPrim}","pwSec":"${this.form.pwPrim}"}`
-        )
+      if (!this.form.pwSec && !this.secEnabled) {
+        if (!this.form.ssidSec) {
+          this.$store.dispatch(
+            'setForm',
+            `{"ssidSec":"${this.form.ssidPrim}","pwSec":"${this.form.pwPrim}"}`
+          )
+        }
         this.validateState('ssidSec')
         this.validateState('pwSec')
       }
