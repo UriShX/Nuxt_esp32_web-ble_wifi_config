@@ -15,7 +15,7 @@ Sadly, there is no support atm for iOS devices, though I believe it can be possi
 
 ## Build Setup
 
-Bluetooth-LE requires a secure connection over HTTPS. For development, the `nuxt.config.js` file contains links to [server key and certificate files](https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates), [according to Nuxt's documentation](https://nuxtjs.org/api/configuration-server#example-using-https-configuration). The files should either be stored in `~/ssl/`, or the `server` tag in `nuxt.config.js` should be edited to fit. \
+Bluetooth-LE requires a secure connection over HTTPS. For development, the `nuxt.config.js` file contains links to [server key and certificate files](https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates), [according to Nuxt's documentation](https://nuxtjs.org/api/configuration-server#example-using-https-configuration). The files should either be stored in `~/ssl/`, or the `server` tag in `nuxt.config.js` should be edited to fit. `server.host` is also set as `0.0.0.0`, to allow testing and debugging on connected Android device through local network. \
  \
 This app was set up to be deployed to [github pages](https://pages.github.com/), according to Nuxt's [guide](https://nuxtjs.org/faq/github-pages#__layout). Since the app was built to be static, the `generate.subFolders` property in `nuxt.config,js` was [set to false, to generate separate files](https://nuxtjs.org/api/configuration-generate/#subfolders) for each of the pages. The `dist` folder is white-listed in `.gitignore`, and can be easily pushed to `gh-pages` branch. More details can be found [here](https://gist.github.com/belohlavek/61dd16c08cd9c57a168408b9ac4121c2).
 

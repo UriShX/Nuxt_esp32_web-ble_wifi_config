@@ -47,6 +47,7 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    // '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
@@ -56,7 +57,6 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    // '@nuxtjs/pwa',
     'nuxt-material-design-icons'
   ],
   /*
@@ -73,6 +73,7 @@ export default {
     subFolders: false
   },
   server: {
+    host: '0.0.0.0', // default: localhost,
     https: {
       key: fs.readFileSync('./ssl/server.key'),
       cert: fs.readFileSync('./ssl/server.crt')

@@ -225,36 +225,42 @@ export default {
       let jsonRecieved
       const decoder = new TextDecoder('windows-1252')
 
-      await this.$espconfig
-        .readCredentials()
-        .then((value) => {
-          jsonRecieved = jsonEncodeDecode(this.apName, value)
-          jsonRecieved = decoder.decode(jsonRecieved)
-          this.$store.dispatch('setForm', jsonRecieved)
-          this.$store.dispatch('setOnDevice', jsonRecieved)
+      const value = await this.$espconfig.readCredentials()
+
+      jsonRecieved = jsonEncodeDecode(this.apName, value)
+      jsonRecieved = decoder.decode(jsonRecieved)
+      this.$store.dispatch('setForm', jsonRecieved)
+      this.$store.dispatch('setOnDevice', jsonRecieved)
+
+      await this.recieveWifiList()
+
+      if (this.$espconfig.connectionStatusUuid) {
+        await this.$espconfig.startConnectionstatusNotifications((event) => {
+          this.$store.dispatch('setApStatus', event.target.value.getUint8())
         })
-        .then(this.recieveWifiList())
-        .then(() => {
-          if (this.$espconfig.connectionStatusUuid) {
-            this.$espconfig.startConnectionstatusNotifications((event) => {
-              this.$store.dispatch('setApStatus', event.target.value.getUint8())
-            })
-          }
-        })
+      }
     },
     async recieveWifiList() {
       if (this.$espconfig.ssidListUuid) {
         const decoder = new TextDecoder('windows-1252')
         this.dropdownMessage = 'Updating SSIDs from device...'
-        await this.$espconfig.readSsidlist().then((value) => {
-          if (value) {
-            this.dropdownMessage = 'SSID seen by device'
-            value = decoder.decode(value)
-            value = JSON.parse(value)
-            this.wifiList = value.SSID
-            return value
-          } else this.dropdownMessage = '-- SSID from ESP32 --'
-        })
+
+        let value = await this.$espconfig.readSsidlist()
+        // eslint-disable-next-line
+        console.log(value)
+        if (value) {
+          this.dropdownMessage = 'SSID seen by device'
+          value = decoder.decode(value)
+          // eslint-disable-next-line
+          console.log(value)
+
+          value = JSON.parse(value)
+          // eslint-disable-next-line
+          console.log(value)
+
+          this.wifiList = value.SSID
+          return value
+        } else this.dropdownMessage = '-- SSID from ESP32 --'
       }
     },
     notificationHandler() {
