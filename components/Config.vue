@@ -246,18 +246,11 @@ export default {
         this.dropdownMessage = 'Updating SSIDs from device...'
 
         let value = await this.$espconfig.readSsidlist()
-        // eslint-disable-next-line
-        console.log(value)
+
         if (value) {
           this.dropdownMessage = 'SSID seen by device'
           value = decoder.decode(value)
-          // eslint-disable-next-line
-          console.log(value)
-
           value = JSON.parse(value)
-          // eslint-disable-next-line
-          console.log(value)
-
           this.wifiList = value.SSID
           return value
         } else this.dropdownMessage = '-- SSID from ESP32 --'

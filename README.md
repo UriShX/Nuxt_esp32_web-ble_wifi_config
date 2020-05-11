@@ -56,7 +56,6 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 ## TODO
 
 - Check geolocation spoofing. Android still requests turning on location services, and in testing returns the function from [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js). Not sure if the values are accepted by the navigator.
-- App does not display SSID list in dropdown on Android.
 - Make app progressive using [Nuxt PWA](https://pwa.nuxtjs.org/).
 - Setting up a device password and authentication scheme, so not everyone can get to the device and read passwords stored on it.
 
