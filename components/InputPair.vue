@@ -188,7 +188,7 @@ export default {
           tmpPw = tmpPw + '•'
         }
       }
-      if ((!this.pwEn && this.pw === tmpPw) || this.pw === this.pwGetter) {
+      if (!this.pwEn && this.pw === tmpPw) {
         this.pw = null
         this.pwEn = true
       }
