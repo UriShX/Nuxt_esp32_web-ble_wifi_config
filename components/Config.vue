@@ -158,19 +158,32 @@ export default {
       }
     }
   },
-  validations: {
-    form: {
-      ssidPrim: {
-        required
-      },
-      pwPrim: {
-        required
-      },
-      ssidSec: {
-        required
-      },
-      pwSec: {
-        required
+  validations() {
+    if (this.btStat) {
+      return {
+        form: {
+          ssidPrim: {
+            required
+          },
+          pwPrim: {
+            required
+          },
+          ssidSec: {
+            required
+          },
+          pwSec: {
+            required
+          }
+        }
+      }
+    } else {
+      return {
+        form: {
+          ssidPrim: {},
+          pwPrim: {},
+          ssidSec: {},
+          pwSec: {}
+        }
       }
     }
   },

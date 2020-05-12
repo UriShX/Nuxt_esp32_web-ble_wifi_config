@@ -2,14 +2,14 @@
 
 ## General description
 
-A web based app used to configure WiFi credentials over Bluetooth LE, for esp32 based IoT projects. Check it out _[here](https://urishx.github.io/Nuxt_esp32_web-ble_wifi_config/)_. \
-The app is written in NuxtJS, a Vue framework for server side rendered apps. This is a recreation of the app, which was originally written using KnockoutJS and JQuery. The reason for recreating the app was that having the BLE config. and connection parts as Nuxt / Vue Components can help integrate them further into more complex web applications. One further \
-The app interacts with the esp32 using web-ble, which is a web standard under development. Thus, it is available atm (02/2020) only on Chrome browsers, on OSX Yosemite and later, Windows 10, Linux with required bluez version etc., and Android > 6.0. [click here for current implementation status](https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md)
+A web based app used to configure WiFi credentials over Bluetooth LE (BLE), for esp32 based IoT projects. Check it out _[here](https://urishx.github.io/Nuxt_esp32_web-ble_wifi_config/)_. \
+The app is written in NuxtJS, a Vue framework for server side rendered apps. This is a recreation of the app, which was originally written using KnockoutJS and JQuery. The main reason for recreating the app was that having the BLE configuration and connection parts as Nuxt / Vue Components can help integrate them further into more complex web applications. \
+The app interacts with the esp32 using web-bluetooth, which is a web standard under development. Thus, it is available atm (02/2020) only on Chrome browsers, on OSX Yosemite and later, Windows 10, Linux with required bluez version etc., and Android > 6.0. [Click here for current implementation status](https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md)
 
 ## Requirements
 
 The app relies on communication with a esp32 based device / dev board, set up to support configuration of mutiple APs over BLE. Check it out _[here](https://urishx.github.io/Nuxt_esp32_web-ble_wifi_config/)_. \
-Such an app can be found at: https://github.com/UriShX/esp32_wifi_ble_advanced, written in PlatformIO with the Arduino framework. The esp32 app complements this web app in functionality, and supports writing, reading, as well as both WiFi connection status and a list of access points seen by the esp32 device. \
+The Arduino script can be found at: https://github.com/UriShX/esp32_wifi_ble_advanced, written in PlatformIO (with the Arduino framework). The esp32 app complements this web app in functionality, and supports writing, reading, as well as both WiFi connection status and a list of access points seen by the esp32 device. \
 The communication with the esp32 device is based on [Bernd Giesecke's ESP32 WiFi configuration over BLE](https://desire.giesecke.tk/index.php/2018/04/06/esp32-wifi-setup-over-ble/), and intends to replace the native Android Java app Bernd used. It also expands on Bernd's original use to support connection status reporting and passing a list of SSIDs seen by the esp32. \
 Sadly, there is no support atm for iOS devices, though I believe it can be possible to achieve with nativescript.
 
@@ -46,18 +46,22 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 - [Vuelidate](https://vuelidate.js.org/) was used to ensure SSID and password fields are not blank before passing the credentials to the device.
 - [Material design icons](https://material.io/resources/icons/?style=baseline) were used throughout, for ease of use in development, through [nuxt-material-icons](https://github.com/anteriovieira/nuxt-material-design-icons).
 
-##### _Other_
+#### _Configuring the app_
 
-- [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js) is used to prevent the BLE connection from asking permission to use geolocation services. _App still requests location services on Android_.
-- [navigatorCheck.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/assets/navigatorCheck.js) contains the method used to check the users' OS and browser for compatibilty with the web-bluetooth standard.
 - App uses the UUIDs Bernd Giesecke's used in his original app to maintain backward compatibility.
 - App searches only for devices with a name that starts with "ESP32", and does not display other devices.
+  - The UUIDs and callbacks used by [espconfig.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/assets/espconfig.js) are set in [Navbar.vue](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/components/Navbar.vue).
+- [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js) is used to prevent the BLE connection from asking permission to use geolocation services. _App still requests location services on Android_.
+  - Android v. 6.0 and above requires `ACCESS_COARSE_LOCATION` to be allowed,and `geo_spoof.js` is an attempt to mitigate that by providing a false location in order for the app to work even when geolocation cannot be found by the Android device. More info about this subject can be found in [this dicussion on stackoverflow.com](https://stackoverflow.com/questions/33045581/location-needs-to-be-enabled-for-bluetooth-low-energy-scanning-on-android-6-0). I have not tested it on this particular app, but have used this method with success to control a servo over BLE in a basement with no GPS reception for [another web app](https://github.com/UriShX/ESP32_fader).
+- [navigatorCheck.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/assets/navigatorCheck.js) contains the method used to check the users' OS and browser for compatibilty with the web-bluetooth standard.
+  - Disabling a "No JavaScript" alert and checking browser and OS for compatibilty is done in [Compatibility.vue](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/components/Compatibility.vue).
 
 ## TODO
 
-- Check geolocation spoofing. Android still requests turning on location services, and in testing returns the function from [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js). Not sure if the values are accepted by the navigator.
-- Make app progressive using [Nuxt PWA](https://pwa.nuxtjs.org/).
-- Setting up a device password and authentication scheme, so not everyone can get to the device and read passwords stored on it.
+- [ ] Check geolocation spoofing. Android still requests turning on location services, and in testing returns the function from [geo_spoof.js](https://github.com/UriShX/Nuxt_esp32_web-ble_wifi_config/blob/master/static/geo_spoof.js). Not sure if the values are accepted by the navigator. This should be checked in an environment where geolocation is not available, such as a basement.
+- [ ] Make app progressive using [Nuxt PWA](https://pwa.nuxtjs.org/).
+- [ ] Setting up a device password and authentication scheme, so not everyone can get to the device and read passwords stored on it.
+  - The app automatically replaces
 
 ### Further goals:
 

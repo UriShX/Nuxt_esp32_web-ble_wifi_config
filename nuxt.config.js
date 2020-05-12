@@ -28,6 +28,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
+    icon: [{ src: 'favicon.ico' }],
     script: [{ src: 'geo_spoof.js' }],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -66,8 +67,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {},
-    devtools: true
+    extend(config, ctx) {}
   },
   generate: {
     subFolders: false
