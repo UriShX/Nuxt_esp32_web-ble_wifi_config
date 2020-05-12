@@ -94,7 +94,14 @@
             <li>Enter a password matching the SSID selected.</li>
             <ul>
               <li>
-                Pressing the Eye icon toggles show / hide of password field.
+                Pressing the Eye icon toggles show / hide of password field
+                text.
+              </li>
+              <li>
+                Passwords recieved from the device cannot be edited, and thier
+                actual text cannot be viewed.<br />
+                Pressing on a password field which content's been recieved from
+                the device will cause the content to be erased.
               </li>
             </ul>
             <li>Enable editing for the secondary password.</li>
@@ -108,7 +115,7 @@
                 <i
                   >Note: If the editing of the secondary SSID credentials is
                   enabled, these fields <u>must not be empty</u>. If editing of
-                  those fields is disabled and they are empty, the app will fill
+                  those fields is disabled and both are empty, the app will fill
                   them with the Primary's credentials before sending the
                   credentials to the device.</i
                 >
